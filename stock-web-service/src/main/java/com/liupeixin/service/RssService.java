@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface RssService {
 
+    public void displayRssFeed() throws Exception;
+
     public List<SyndEntry> fetchRssFeed(String rssUrl) throws Exception;
 
 }
