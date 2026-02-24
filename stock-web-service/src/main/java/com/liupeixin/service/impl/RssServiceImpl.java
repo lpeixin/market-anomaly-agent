@@ -1,5 +1,6 @@
 package com.liupeixin.service.impl;
 
+import com.liupeixin.entity.USStockRss;
 import com.liupeixin.service.RssService;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -17,7 +18,16 @@ public class RssServiceImpl implements RssService {
 
     @Override
     public void displayRssFeed() throws Exception {
-        this.fetchRssFeed(RSS_URL).forEach(System.out::println);
+        List<SyndEntry> rssList = this.fetchRssFeed(RSS_URL);
+        if (rssList == null || rssList.isEmpty()) {
+            System.out.println("RSS is empty.");
+            return;
+        }
+        for (SyndEntry entry : rssList) {
+            USStockRss stockRss = new USStockRss();
+            String title = entry.getTitle();
+            stockRss.setTitle(title);
+        }
     }
 
     @Override
