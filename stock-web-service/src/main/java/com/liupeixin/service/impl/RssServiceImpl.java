@@ -25,8 +25,9 @@ public class RssServiceImpl implements RssService {
         }
         for (SyndEntry entry : rssList) {
             USStockRss stockRss = new USStockRss();
-            String title = entry.getTitle();
-            stockRss.setTitle(title);
+            stockRss.setTitle(entry.getTitle());
+            stockRss.setLink(entry.getLink());
+            // stockRss.setPubDateGmt(entry.getPublishedDate());
         }
     }
 
