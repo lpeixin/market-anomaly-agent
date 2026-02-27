@@ -2,6 +2,7 @@ package com.liupeixin.service.impl;
 
 import com.liupeixin.entity.USStockRss;
 import com.liupeixin.service.RssService;
+import com.liupeixin.utils.DateConverter;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
@@ -9,6 +10,7 @@ import com.rometools.rome.io.XmlReader;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,7 +29,9 @@ public class RssServiceImpl implements RssService {
             USStockRss stockRss = new USStockRss();
             stockRss.setTitle(entry.getTitle());
             stockRss.setLink(entry.getLink());
-            // stockRss.setPubDateGmt(entry.getPublishedDate());
+            LocalDateTime gmtDateTime = DateConverter.convertGmt(entry.getPublishedDate());
+            stockRss.setPubDateGmt(gmtDateTime);
+
         }
     }
 
