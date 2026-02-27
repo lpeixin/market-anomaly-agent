@@ -24,10 +24,11 @@ public class DateConverter {
     public static String getNewYorkTime(Date externalDate) {
         return convertGmtToNewYork(externalDate).format(FORMATTER);
     }
-    
+
     public static LocalDateTime convertGmtToNewYork(Date date) {
         Instant instant = date.toInstant();
         ZonedDateTime gmtTime = instant.atZone(ZoneId.of("GMT"));
         return gmtTime.withZoneSameInstant(ZoneId.of("America/New_York")).toLocalDateTime();
     }
+    
 }
