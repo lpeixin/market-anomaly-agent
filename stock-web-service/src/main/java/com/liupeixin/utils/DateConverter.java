@@ -15,8 +15,8 @@ public class DateConverter {
         return convertGmt(externalDate).format(FORMATTER);
     }
 
-    public static LocalDateTime convertGmt(Date externalDate) {
-        Instant instant = externalDate.toInstant();
+    public static LocalDateTime convertGmt(Date date) {
+        Instant instant = date.toInstant();
         ZonedDateTime gmtTime = instant.atZone(ZoneId.of("GMT"));
         return gmtTime.toLocalDateTime();
     }
@@ -30,5 +30,15 @@ public class DateConverter {
         ZonedDateTime gmtTime = instant.atZone(ZoneId.of("GMT"));
         return gmtTime.withZoneSameInstant(ZoneId.of("America/New_York")).toLocalDateTime();
     }
-    
+
+    public static String getCnTime(Date externalDate) {
+        return convertGmtToCn(externalDate).format(FORMATTER);
+    }
+
+    public static LocalDateTime convertGmtToCn(Date date) {
+        Instant instant = date.toInstant();
+        ZonedDateTime gmtTime = instant.atZone(ZoneId.of("GMT"));
+        ZonedDateTime cnTime = gmtTime.withZoneSameInstant(ZoneId.of("Asia/Shanghai"));
+        return cnTime.toLocalDateTime();
+    }
 }
