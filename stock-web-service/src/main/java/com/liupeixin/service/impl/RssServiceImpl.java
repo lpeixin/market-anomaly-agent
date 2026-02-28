@@ -31,7 +31,8 @@ public class RssServiceImpl implements RssService {
             stockRss.setLink(entry.getLink());
             LocalDateTime gmtDateTime = DateConverter.convertGmt(entry.getPublishedDate());
             stockRss.setPubDateGmt(gmtDateTime);
-
+            LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getUpdatedDate());
+            stockRss.setPubDateCn(cnDateTime);
         }
     }
 
