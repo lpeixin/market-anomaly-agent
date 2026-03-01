@@ -27,12 +27,17 @@ public class RssServiceImpl implements RssService {
         }
         for (SyndEntry entry : rssList) {
             USStockRss stockRss = new USStockRss();
-            stockRss.setTitle(entry.getTitle());
+            String title = entry.getTitle();
+            stockRss.setTitle(getStockTitle(title));
             stockRss.setLink(entry.getLink());
             LocalDateTime gmtDateTime = DateConverter.convertGmt(entry.getPublishedDate());
             stockRss.setPubDateGmt(gmtDateTime);
-            LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getUpdatedDate());
+            LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
             stockRss.setPubDateCn(cnDateTime);
+            stockRss.setStockCode(getStockCode(title));
+            stockRss.setTags("");
+            stockRss.setTitleCn("");
+            System.out.println(stockRss.toString());
         }
     }
 
@@ -42,5 +47,15 @@ public class RssServiceImpl implements RssService {
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(url));
         return feed.getEntries();
+    }
+
+    private String getStockTitle(String title) {
+        String[] arr = title.split("\\|");
+        return arr[1].trim();
+    }
+
+    private String getStockCode(String title) {
+        String[] arr = title.split("\\|");
+        return arr[arr.length - 1].trim().split("Stock News")[0].trim();
     }
 }
