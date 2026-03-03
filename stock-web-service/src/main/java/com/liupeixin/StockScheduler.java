@@ -15,7 +15,7 @@ public class StockScheduler {
     @Resource
     private RssService rssService;
 
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void getStockInfo() throws Exception {
         System.out.println("running every 20 seconds... " + LocalDateTime.now());
         rssService.displayRssFeed();

@@ -10,16 +10,21 @@ import java.util.List;
 
 public class StockInfoCrawler {
 
+    private static final String URL = "https://www.stocktitan.net/news/live.html";
+
     public static void main(String[] args) throws Exception {
-        String url = "https://www.stocktitan.net/news/live.html";
         String targetTitle =
                 "Inverite Announces Financial Results for Nine and Three-Months Ending December 31, 2025";
-        Document doc = Jsoup.connect(url)
+        List<String> tags = getTags(targetTitle);
+        System.out.println(tags);
+    }
+
+    public static List<String> getTags(String title) throws Exception {
+        Document doc = Jsoup.connect(URL)
                 .userAgent("Mozilla/5.0")
                 .timeout(10_000)
                 .get();
-        List<String> tags = extractTagsByTitle(doc, targetTitle);
-        System.out.println(tags);
+        return extractTagsByTitle(doc, title);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.liupeixin.service.impl;
 import com.liupeixin.entity.USStockRss;
 import com.liupeixin.service.RssService;
 import com.liupeixin.utils.DateConverter;
+import com.liupeixin.utils.StockInfoCrawler;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
@@ -28,14 +29,16 @@ public class RssServiceImpl implements RssService {
         for (SyndEntry entry : rssList) {
             USStockRss stockRss = new USStockRss();
             String title = entry.getTitle();
-            stockRss.setTitle(getStockTitle(title));
+            String actualTitle = getStockTitle(title);
+            stockRss.setTitle(actualTitle);
             stockRss.setLink(entry.getLink());
             LocalDateTime gmtDateTime = DateConverter.convertGmt(entry.getPublishedDate());
             stockRss.setPubDateGmt(gmtDateTime);
             LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
             stockRss.setPubDateCn(cnDateTime);
             stockRss.setStockCode(getStockCode(title));
-            stockRss.setTags("");
+            stockRss.setTags(StockInfoCrawler.getTags(actualTitle).toString());
+            // TODO translate title to CN
             stockRss.setTitleCn("");
             System.out.println(stockRss.toString());
         }
