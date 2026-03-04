@@ -8,11 +8,15 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.liupeixin.utils.StockInfoCrawler.getWebPage;
 
 @Service
 public class RssServiceImpl implements RssService {
@@ -22,6 +26,7 @@ public class RssServiceImpl implements RssService {
     @Override
     public void displayRssFeed() throws Exception {
         List<SyndEntry> rssList = this.fetchRssFeed(RSS_URL);
+        Document webPage = StockInfoCrawler.getWebPage();
         if (rssList == null || rssList.isEmpty()) {
             System.out.println("RSS is empty.");
             return;
@@ -37,7 +42,7 @@ public class RssServiceImpl implements RssService {
             LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
             stockRss.setPubDateCn(cnDateTime);
             stockRss.setStockCode(getStockCode(title));
-            stockRss.setTags(StockInfoCrawler.getTags(actualTitle).toString());
+            stockRss.setTags(StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage).toString());
             // TODO translate title to CN
             stockRss.setTitleCn("");
             System.out.println(stockRss.toString());
