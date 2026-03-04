@@ -19,6 +19,14 @@ public class StockInfoCrawler {
         System.out.println(tags);
     }
 
+    public static Document getWebPage() throws Exception {
+        return Jsoup.connect(URL).get();
+    }
+
+    public static List<String> getTagsFromWebPage(String title, Document webPage) throws Exception {
+        return extractTagsByTitle(webPage, title);
+    }
+
     public static List<String> getTags(String title) throws Exception {
         Document doc = Jsoup.connect(URL)
                 .userAgent("Mozilla/5.0")
