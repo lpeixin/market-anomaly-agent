@@ -26,7 +26,8 @@ public class RssServiceImpl implements RssService {
     @Override
     public void displayRssFeed() throws Exception {
         List<SyndEntry> rssList = this.fetchRssFeed(RSS_URL);
-        Document webPage = StockInfoCrawler.getWebPage();
+        // TODO solve webpage crawling issue
+        // Document webPage = StockInfoCrawler.getWebPage();
         if (rssList == null || rssList.isEmpty()) {
             System.out.println("RSS is empty.");
             return;
@@ -42,7 +43,7 @@ public class RssServiceImpl implements RssService {
             LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
             stockRss.setPubDateCn(cnDateTime);
             stockRss.setStockCode(getStockCode(title));
-            stockRss.setTags(StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage).toString());
+            // stockRss.setTags(StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage).toString());
             // TODO translate title to CN
             stockRss.setTitleCn("");
             System.out.println(stockRss.toString());
