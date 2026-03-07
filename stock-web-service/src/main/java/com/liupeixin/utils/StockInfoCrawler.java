@@ -1,14 +1,24 @@
 package com.liupeixin.utils;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class StockInfoCrawler {
+
+    private static final String[] USER_AGENTS = {
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.2; rv:132.0) Gecko/20100101 Firefox/132.0",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Edg/131.0.0.0 Safari/537.36"
+    };
+
+    private static Connection session = null;
 
     private static final String URL = "https://www.stocktitan.net/news/live.html";
 
@@ -20,7 +30,35 @@ public class StockInfoCrawler {
     }
 
     public static Document getWebPage() throws Exception {
-        return Jsoup.connect(URL).get();
+        if (session == null) {
+            // initialize session in first time fetching
+            session = Jsoup.newSession()
+                    .timeout(15_000)
+                    .maxBodySize(5 * 1024 * 1024)
+                    .ignoreContentType(true)
+                    .ignoreHttpErrors(true)
+                    .followRedirects(true);
+        }
+        String ua = USER_AGENTS[new Random().nextInt(USER_AGENTS.length)];
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("User-Agent", ua);
+        headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8");
+        headers.put("Accept-Language", "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7");
+        headers.put("Accept-Encoding", "gzip, deflate, br");
+        headers.put("Connection", "keep-alive");
+        headers.put("Upgrade-Insecure-Requests", "1");
+        headers.put("Sec-Fetch-Dest", "document");
+        headers.put("Sec-Fetch-Mode", "navigate");
+        headers.put("Sec-Fetch-Site", "none");
+        headers.put("Sec-Fetch-User", "?1");
+
+        return session
+                .headers(headers)
+                .referrer("https://www.google.com/")
+                .userAgent(ua)
+                .get();
+        // return Jsoup.connect(URL).get();
     }
 
     public static List<String> getTagsFromWebPage(String title, Document webPage) throws Exception {
