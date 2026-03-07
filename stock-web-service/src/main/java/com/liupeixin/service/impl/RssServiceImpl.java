@@ -1,5 +1,6 @@
 package com.liupeixin.service.impl;
 
+import com.liupeixin.constants.StockTag;
 import com.liupeixin.entity.USStockRss;
 import com.liupeixin.service.RssService;
 import com.liupeixin.utils.DateConverter;
@@ -66,5 +67,16 @@ public class RssServiceImpl implements RssService {
     private String getStockCode(String title) {
         String[] arr = title.split("\\|");
         return arr[arr.length - 1].trim().split("Stock News")[0].trim();
+    }
+
+    private String getTagsCn(List<String> list) {
+        StringBuilder tagStr = new StringBuilder();
+        for (String str : list) {
+            tagStr.append(StockTag.getTagValue(str)).append(",");
+        }
+        if (!tagStr.isEmpty()) {
+            tagStr.deleteCharAt(tagStr.length() - 1);
+        }
+        return tagStr.toString();
     }
 }
