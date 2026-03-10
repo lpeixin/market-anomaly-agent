@@ -40,10 +40,14 @@ public class RssServiceImpl implements RssService {
             LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
             stockRss.setPubDateCn(cnDateTime);
             stockRss.setStockCode(getStockCode(title));
-            List<String> tagList = StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage);
-            stockRss.setTags(tagList.toString());
+            try {
+                List<String> tagList = StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage);
+                stockRss.setTags(tagList.toString());
+            } catch (Exception e) {
+                stockRss.setTags("");
+            }
             // TODO translate title to CN
-            stockRss.setTitleCn(getTagsCn(tagList));
+            stockRss.setTitleCn("");
             System.out.println(stockRss.toString());
         }
     }
