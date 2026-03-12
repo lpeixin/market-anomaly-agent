@@ -486,9 +486,6 @@ local.properties
 .idea/gradle.xml
 .idea/**/gradle.xml
 
-# Local setting files
-stock-web-service/src/main/resources/application-dev.yml
-
 # Maven
 idea/vcs.xml
 idea/modules.xml
