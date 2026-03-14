@@ -1,5 +1,6 @@
 package com.liupeixin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("us_stock_rss")
 public class USStockRss {
 
     private String id;
