@@ -3,12 +3,14 @@ package com.liupeixin.service.impl;
 import com.liupeixin.constants.StockTag;
 import com.liupeixin.entity.USStockRss;
 import com.liupeixin.service.RssService;
+import com.liupeixin.service.StockService;
 import com.liupeixin.utils.DateConverter;
 import com.liupeixin.utils.StockInfoCrawler;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import jakarta.annotation.Resource;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ import java.util.List;
 
 @Service
 public class RssServiceImpl implements RssService {
+
+    @Resource
+    private StockService stockService;
 
     public static final String RSS_URL = "https://www.stocktitan.net/rss";
 
@@ -48,7 +53,9 @@ public class RssServiceImpl implements RssService {
             }
             // TODO translate title to CN
             stockRss.setTitleCn("");
+
             System.out.println(stockRss.toString());
+            stockService.saveStockNews(stockRss);
         }
     }
 
