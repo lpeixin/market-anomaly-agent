@@ -6,3 +6,10 @@ spring:
 logging:
   level:
     root: info
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type:
+      update-strategy: not_empty
+  mapper-locations: classpath*:/mappers/*.xml
