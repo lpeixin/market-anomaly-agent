@@ -39,20 +39,26 @@ public class RssServiceImpl implements RssService {
             String title = entry.getTitle();
             String actualTitle = getStockTitle(title);
             stockRss.setTitle(actualTitle);
+            // TODO translate title to CN
+            stockRss.setTitleCn("");
             stockRss.setLink(entry.getLink());
             LocalDateTime gmtDateTime = DateConverter.convertGmt(entry.getPublishedDate());
             stockRss.setPubDateGmt(gmtDateTime);
             LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
             stockRss.setPubDateCn(cnDateTime);
-            stockRss.setStockCode(getStockCode(title));
+            String stockCode = getStockCode(title);
+            stockRss.setStockCode(stockCode);
             try {
                 List<String> tagList = StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage);
                 stockRss.setTags(tagList.toString());
             } catch (Exception e) {
                 stockRss.setTags("");
             }
-            // TODO translate title to CN
-            stockRss.setTitleCn("");
+
+            if (stockService.isStockNewsExist(stockCode, stockRss.getLink())) {
+                System.out.println("Stock " + stockCode + " is exist. Skip saving step.");
+                continue;
+            }
 
             System.out.println(stockRss.toString());
             stockService.saveStockNews(stockRss);
