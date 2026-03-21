@@ -1,6 +1,7 @@
 package com.liupeixin.service.impl;
 
 import com.liupeixin.constants.StockTag;
+import com.liupeixin.entity.USStockMsg;
 import com.liupeixin.entity.USStockRss;
 import com.liupeixin.service.RssService;
 import com.liupeixin.service.StockService;
@@ -12,10 +13,12 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import jakarta.annotation.Resource;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,15 +42,23 @@ public class RssServiceImpl implements RssService {
             String title = entry.getTitle();
             String actualTitle = getStockTitle(title);
             stockRss.setTitle(actualTitle);
-            // TODO translate title to CN
-            stockRss.setTitleCn("");
             stockRss.setLink(entry.getLink());
-            LocalDateTime gmtDateTime = DateConverter.convertGmt(entry.getPublishedDate());
+            Date gmtDateTemp = entry.getPublishedDate();
+            LocalDateTime gmtDateTime = DateConverter.convertGmt(gmtDateTemp);
             stockRss.setPubDateGmt(gmtDateTime);
-            LocalDateTime cnDateTime = DateConverter.convertGmtToCn(entry.getPublishedDate());
+            LocalDateTime cnDateTime = DateConverter.convertGmtToCn(gmtDateTemp);
             stockRss.setPubDateCn(cnDateTime);
             String stockCode = getStockCode(title);
             stockRss.setStockCode(stockCode);
+
+            if (stockService.isStockNewsExist(stockCode, stockRss.getLink())) {
+                System.out.println("Stock " + stockCode + " is exist. Skip saving step.");
+                continue;
+            }
+
+            // TODO translate title to CN
+            stockRss.setTitleCn("");
+
             try {
                 List<String> tagList = StockInfoCrawler.getTagsFromWebPage(actualTitle, webPage);
                 stockRss.setTags(tagList.toString());
@@ -55,13 +66,12 @@ public class RssServiceImpl implements RssService {
                 stockRss.setTags("");
             }
 
-            if (stockService.isStockNewsExist(stockCode, stockRss.getLink())) {
-                System.out.println("Stock " + stockCode + " is exist. Skip saving step.");
-                continue;
-            }
-
             System.out.println(stockRss.toString());
             stockService.saveStockNews(stockRss);
+
+            USStockMsg stockMsg = new USStockMsg();
+            BeanUtils.copyProperties(stockRss, stockMsg);
+            stockMsg.setPubDate(DateConverter.getNewYorkTime(gmtDateTemp));
         }
     }
 
