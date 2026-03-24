@@ -41,4 +41,32 @@ public class DateConverter {
         ZonedDateTime cnTime = gmtTime.withZoneSameInstant(ZoneId.of("Asia/Shanghai"));
         return cnTime.toLocalDateTime();
     }
+
+    public static LocalDateTime minusOneDay(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Time is null.");
+        }
+        return dateTime.minusHours(24);
+    }
+
+    public static LocalDateTime minusThreeDay(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Time is null.");
+        }
+        return dateTime.minusDays(3);
+    }
+
+    public static LocalDateTime minusOneWeek(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Time is null.");
+        }
+        return dateTime.minusWeeks(1);
+    }
+
+    public static LocalDateTime plusOneMinute(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Time is null.");
+        }
+        return dateTime.plusMinutes(1);
+    }
 }

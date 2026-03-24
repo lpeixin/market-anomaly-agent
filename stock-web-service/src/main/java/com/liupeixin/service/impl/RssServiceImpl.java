@@ -72,6 +72,19 @@ public class RssServiceImpl implements RssService {
             USStockMsg stockMsg = new USStockMsg();
             BeanUtils.copyProperties(stockRss, stockMsg);
             stockMsg.setPubDate(DateConverter.getNewYorkTime(gmtDateTemp));
+            Long countsOneDay = stockService.getStockUnusualCounts(stockRss,
+                    DateConverter.minusOneDay(gmtDateTime),
+                    DateConverter.plusOneMinute(gmtDateTime));
+            Long countsThreeDays = stockService.getStockUnusualCounts(stockRss,
+                    DateConverter.minusThreeDay(gmtDateTime),
+                    DateConverter.plusOneMinute(gmtDateTime));
+            Long countsOneWeek = stockService.getStockUnusualCounts(stockRss,
+                    DateConverter.minusOneWeek(gmtDateTime),
+                    DateConverter.plusOneMinute(gmtDateTime));
+            stockMsg.setCountOneDay(countsOneDay);
+            stockMsg.setCountThreeDays(countsThreeDays);
+            stockMsg.setCountOneWeek(countsOneWeek);
+            System.out.println(stockMsg.toString());
         }
     }
 
