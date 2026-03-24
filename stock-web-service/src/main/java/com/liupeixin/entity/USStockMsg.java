@@ -1,6 +1,5 @@
 package com.liupeixin.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +17,7 @@ public class USStockMsg {
     private String titleCn;
     private String pubDate;
     private String tags;
-    private Integer count_24h;
+    private Long countOneDay;
+    private Long countThreeDays;
+    private Long countOneWeek;
 }
