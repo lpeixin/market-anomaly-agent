@@ -46,7 +46,6 @@ public class StockInfoCrawler {
         headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8");
         headers.put("Accept-Language", "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7");
         headers.put("Accept-Encoding", "gzip, deflate, br");
-        headers.put("Connection", "keep-alive");
         headers.put("Upgrade-Insecure-Requests", "1");
         headers.put("Sec-Fetch-Dest", "document");
         headers.put("Sec-Fetch-Mode", "navigate");
@@ -54,6 +53,7 @@ public class StockInfoCrawler {
         headers.put("Sec-Fetch-User", "?1");
 
         return session
+                .url(URL)
                 .headers(headers)
                 .referrer("https://www.google.com/")
                 .userAgent(ua)
