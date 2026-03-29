@@ -98,7 +98,7 @@ public class RssServiceImpl implements RssService {
 
     private String getStockTitle(String title) {
         String[] arr = title.split("\\|");
-        return arr[1].trim();
+        return arr[0].trim();
     }
 
     private String getStockCode(String title) {
