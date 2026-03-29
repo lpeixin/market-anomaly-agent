@@ -5,6 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
@@ -41,16 +42,7 @@ public class StockInfoCrawler {
         }
         String ua = USER_AGENTS[new Random().nextInt(USER_AGENTS.length)];
 
-        Map<String, String> headers = new HashMap<>();
-        headers.put("User-Agent", ua);
-        headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8");
-        headers.put("Accept-Language", "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7");
-        headers.put("Accept-Encoding", "gzip, deflate, br");
-        headers.put("Upgrade-Insecure-Requests", "1");
-        headers.put("Sec-Fetch-Dest", "document");
-        headers.put("Sec-Fetch-Mode", "navigate");
-        headers.put("Sec-Fetch-Site", "none");
-        headers.put("Sec-Fetch-User", "?1");
+        Map<String, String> headers = getStringMap(ua);
 
         return session
                 .url(URL)
@@ -71,6 +63,20 @@ public class StockInfoCrawler {
                 .timeout(10_000)
                 .get();
         return extractTagsByTitle(doc, title);
+    }
+
+    private static @NonNull Map<String, String> getStringMap(String ua) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("User-Agent", ua);
+        headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8");
+        headers.put("Accept-Language", "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7");
+        headers.put("Accept-Encoding", "gzip, deflate");
+        headers.put("Upgrade-Insecure-Requests", "1");
+        headers.put("Sec-Fetch-Dest", "document");
+        headers.put("Sec-Fetch-Mode", "navigate");
+        headers.put("Sec-Fetch-Site", "none");
+        headers.put("Sec-Fetch-User", "?1");
+        return headers;
     }
 
     /**
