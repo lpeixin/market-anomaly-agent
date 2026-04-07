@@ -1,5 +1,6 @@
 package com.liupeixin;
 
+import cn.hutool.core.date.StopWatch;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,11 +14,15 @@ public class ServiceLogAspect {
 
     @Around("execution(* com.liupeixin.service.impl..*.*(..))")
     public Object recordTimeLog(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
         Object result = joinPoint.proceed();
         String pointName =joinPoint.getTarget().getClass().getName() + '.' + joinPoint.getSignature().getName();
-        long end = System.currentTimeMillis();
-        long period = end - start;
+        stopWatch.stop();
+
+        long period = stopWatch.getTotalTimeMillis();
         if (period > 3000) {
             log.error("[{}], [{}], [{}], [{}]", pointName, period, "SLOW", joinPoint.getArgs());
         } else if (period > 2000) {
