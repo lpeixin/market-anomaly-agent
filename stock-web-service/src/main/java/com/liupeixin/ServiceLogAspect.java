@@ -19,7 +19,7 @@ public class ServiceLogAspect {
         stopWatch.start();
 
         Object result = joinPoint.proceed();
-        String pointName =joinPoint.getTarget().getClass().getName() + '.' + joinPoint.getSignature().getName();
+        String pointName = joinPoint.getTarget().getClass().getName() + '.' + joinPoint.getSignature().getName();
         stopWatch.stop();
 
         long period = stopWatch.getTotalTimeMillis();
@@ -30,6 +30,6 @@ public class ServiceLogAspect {
         } else {
             log.info("[{}], [{}], [{}], [{}]", pointName, period, "OK", joinPoint.getArgs());
         }
-        return null;
+        return result;
     }
 }
