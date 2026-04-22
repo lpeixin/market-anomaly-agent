@@ -56,6 +56,8 @@ public class RssServiceImpl implements RssService {
                 continue;
             }
 
+            // TODO use translation service to translate to CN
+
             // TODO translate title to CN
             stockRss.setTitleCn("");
 
